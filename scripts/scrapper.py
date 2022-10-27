@@ -2,6 +2,8 @@
 from requests_html import HTMLSession
 import argparse
 import markdownify
+import os
+import datetime
 
 
 def determine_elem_names(platform):
@@ -52,6 +54,35 @@ def parse_problem(platform, url):
     problem_text = f"# {problem_title} \n \n link: {url} \n \n {problem_text}"
     with open('README.md', 'w') as f:
         f.write(problem_text)
+    return problem_title
+
+
+def create_basic_files(problem_title, url):
+    tday = datetime.date.today()
+    tday = tday.strftime("%d-%m-%Y")
+    author = 'Nazib Abrar'
+    cppcontent = f"\n\
+// Problem: {problem_title}\n\
+// Link: {url}\n\
+// Date: {tday}\n\
+// Author: {author}\n\n\
+#include <bits/stdc++.h>\n\
+using namespace std;\n\n\
+#define _DEBUG 1\n\n\
+int main()\n\
+{{\n\
+#ifdef _DEBUG\n\
+    freopen(\"input.txt\", \"r\", stdin);\n\
+    freopen(\"output.txt\", \"w\", stdout);\n\
+#endif\n\n\n\
+    return 0;\n\
+}}"
+    with open('cpp/soln.cpp', 'w') as cppfile:
+        cppfile.write(cppcontent)
+    with open("cpp/input.txt", "w") as inp:
+        pass
+    with open("cpp/output.txt", "w") as outp:
+        pass
 
 
 if __name__ == "__main__":
@@ -72,4 +103,6 @@ if __name__ == "__main__":
 
     url = args.Url
     platform = args.Platform
-    parse_problem(platform=platform, url=url)
+    title = parse_problem(platform=platform, url=url)
+    os.mkdir('cpp')
+    create_basic_files(title, url)
