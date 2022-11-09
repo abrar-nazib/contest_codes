@@ -6,17 +6,24 @@ import os
 import datetime
 
 
-def determine_elem_names(platform):
+def determine_elem_names(platform, url=None):
     if (platform == 'hackerearth'):
         rt = {
             'title': 'div.title-panel div.title',
             'problem': 'div.problem-details'
+        }
+    elif (platform == 'leetcode'):
+        rt = {
+            'title': 'div.css-v3d350',
+            'problem': 'div.content__u3I1 question-content__JfgR'
         }
     elif (platform == 'hackerrank'):
         rt = {
             'title': 'h1',
             'problem': 'div.hackdown-content'
         }
+        create_basic_files(platform, url)
+        exit()
     elif (platform == 'codeforces'):
         rt = {
             'title': 'div.header div.title',
@@ -30,7 +37,7 @@ def determine_elem_names(platform):
 
 def parse_problem(platform, url):
     session = HTMLSession()
-    elem_names = determine_elem_names(platform=platform)
+    elem_names = determine_elem_names(platform, url)
     title_elem = elem_names['title']
     problem_elem = elem_names['problem']
     # url = 'https://www.hackerearth.com/problem/algorithm/mangoes/'
@@ -40,6 +47,7 @@ def parse_problem(platform, url):
 
     try:
         problem_title = html_object.find(title_elem)[0].text
+        print(f"Problem Title: {problem_title}")
     except:
         problem_title = 'Not Found'
         print("Title not found")
@@ -77,6 +85,7 @@ int main()\n\
 #endif\n\n\n\
     return 0;\n\
 }}"
+    os.mkdir('cpp')
     with open('cpp/soln.cpp', 'w') as cppfile:
         cppfile.write(cppcontent)
     with open("cpp/input.txt", "w") as inp:
@@ -104,5 +113,4 @@ if __name__ == "__main__":
     url = args.Url
     platform = args.Platform
     title = parse_problem(platform=platform, url=url)
-    os.mkdir('cpp')
     create_basic_files(title, url)
