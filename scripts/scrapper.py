@@ -24,6 +24,13 @@ def determine_elem_names(platform, url=None):
         }
         create_basic_files(platform, url)
         exit()
+    elif (platform == 'geeksforgeeks'):
+        rt = {
+            'title': 'h1',
+            'problem': 'div.hackdown-content'
+        }
+        create_basic_files(platform, url)
+        exit()
     elif (platform == 'codeforces'):
         rt = {
             'title': 'div.header div.title',
@@ -100,7 +107,7 @@ if __name__ == "__main__":
     parser.add_argument("Platform",
                         metavar="platform",
                         type=str,
-                        help="Name of the platform"
+                        help="Name of the platform. ex: hackerearth, leetcode, hackerrank, geeksforgeeks, codeforces",
                         )
     parser.add_argument("Url",
                         metavar="url",
