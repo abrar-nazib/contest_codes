@@ -26,11 +26,10 @@ def determine_elem_names(platform, url=None):
         exit()
     elif (platform == 'geeksforgeeks'):
         rt = {
-            'title': 'h1',
-            'problem': 'div.hackdown-content'
+            'title': 'h3.g-m-0',
+            'problem': 'div.problems_problem_content__Xm_eO'
         }
-        create_basic_files(platform, url)
-        exit()
+
     elif (platform == 'codeforces'):
         rt = {
             'title': 'div.header div.title',
