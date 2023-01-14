@@ -10,14 +10,16 @@ int main()
 #endif
 
     int h, w;
-    while (1)
+    int a = 2;
+    int b = 3;
+    for (;;)
     {
         scanf("%d %d", &h, &w);
         if (h == 0 && w == 0)
             break;
-        for (int i = 0; i < h; i++)
+        for (int i = 1; i <= h; i++)
         {
-            for (int j = 0; j < w; j++)
+            for (int j = 1; j <= w; j++)
             {
                 printf("#");
             }

@@ -1,6 +1,5 @@
-#include <stdio.h>
-
 #define _DEBUG 1
+#include <stdio.h>
 
 int main()
 {
@@ -10,12 +9,15 @@ int main()
     freopen("output.txt", "w", stdout);
 #endif
 
-    for (int i = 1; i <= 100; i++)
+    int rows = 5;
+    for (int i = 1; i <= rows; i++)
     {
-        if (i % 2 == 0)
+        for (int j = 0; j < i; j++)
         {
-            printf("%d\n", i);
+            printf("* ");
         }
+        printf("\n");
     }
+
     return 0;
 }
