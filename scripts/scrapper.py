@@ -80,15 +80,17 @@ def create_basic_files(problem_title, url):
 // Link: {url}\n\
 // Date: {tday}\n\
 // Author: {author}\n\n\
+#define _LOCAL 1\n\n\
 #include <bits/stdc++.h>\n\
 using namespace std;\n\n\
-#define _DEBUG 1\n\n\
 int main()\n\
 {{\n\
-#ifdef _DEBUG\n\
+#ifdef _LOCAL\n\
     freopen(\"input.txt\", \"r\", stdin);\n\
     freopen(\"output.txt\", \"w\", stdout);\n\
-#endif\n\n\n\
+#endif\n\n\
+    ios::sync_with_stdio(0);\n\
+    cin.tie(0);\n\n\n\
     return 0;\n\
 }}"
     os.mkdir('cpp')
