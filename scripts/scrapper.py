@@ -75,12 +75,11 @@ def create_basic_files(problem_title, url):
     tday = datetime.date.today()
     tday = tday.strftime("%d-%m-%Y")
     author = 'Nazib Abrar'
-    cppcontent = f"\n\
+    cppcontent = f"#define _LOCAL 1\n\n\
 // Problem: {problem_title}\n\
 // Link: {url}\n\
 // Date: {tday}\n\
 // Author: {author}\n\n\
-#define _LOCAL 1\n\n\
 #include <bits/stdc++.h>\n\
 using namespace std;\n\n\
 int main()\n\
