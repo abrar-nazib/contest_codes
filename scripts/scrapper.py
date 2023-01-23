@@ -75,20 +75,21 @@ def create_basic_files(problem_title, url):
     tday = datetime.date.today()
     tday = tday.strftime("%d-%m-%Y")
     author = 'Nazib Abrar'
-    cppcontent = f"\n\
+    cppcontent = f"#define _LOCAL 1\n\n\
 // Problem: {problem_title}\n\
 // Link: {url}\n\
 // Date: {tday}\n\
 // Author: {author}\n\n\
 #include <bits/stdc++.h>\n\
 using namespace std;\n\n\
-#define _DEBUG 1\n\n\
 int main()\n\
 {{\n\
-#ifdef _DEBUG\n\
+#ifdef _LOCAL\n\
     freopen(\"input.txt\", \"r\", stdin);\n\
     freopen(\"output.txt\", \"w\", stdout);\n\
-#endif\n\n\n\
+#endif\n\n\
+    ios::sync_with_stdio(0);\n\
+    cin.tie(0);\n\n\n\
     return 0;\n\
 }}"
     os.mkdir('cpp')
