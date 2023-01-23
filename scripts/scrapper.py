@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 from requests_html import HTMLSession
 import argparse
 import markdownify
