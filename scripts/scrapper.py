@@ -4,6 +4,7 @@ import argparse
 import markdownify
 import os
 import datetime
+import time
 
 
 def determine_elem_names(platform, url=None):
@@ -14,8 +15,8 @@ def determine_elem_names(platform, url=None):
         }
     elif (platform == 'leetcode'):
         rt = {
-            'title': 'div.css-v3d350',
-            'problem': 'div.content__u3I1 question-content__JfgR'
+            'title': 'span.mr-2',
+            'problem': 'div._1l1MA'
         }
     elif (platform == 'hackerrank'):
         rt = {
@@ -54,14 +55,17 @@ def parse_problem(platform, url):
     try:
         problem_title = html_object.find(title_elem)[0].text
         print(f"Problem Title: {problem_title}")
-    except:
+    except Exception as e:
         problem_title = 'Not Found'
         print("Title not found")
+        print(e)
     problem_obj = html_object.find(problem_elem)
     try:
         problem_html = problem_obj[0].html
+        print("Problem statement found")
     except Exception as e:
-        print(problem_obj)
+        print("Problem Statement not found")
+        print(e)
         exit()
 
     problem_text = markdownify.markdownify(problem_html, heading_style="ATX")
@@ -101,6 +105,13 @@ int main()\n\
         pass
 
 
+def open_editor():
+    time.sleep(1)
+    os.system("code cpp")
+    time.sleep(3)
+    os.system("code cpp/output.txt -n; code cpp/input.txt -n")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="A web scrapper for competitive programming problems")
@@ -121,3 +132,4 @@ if __name__ == "__main__":
     platform = args.Platform
     title = parse_problem(platform=platform, url=url)
     create_basic_files(title, url)
+    open_editor()
