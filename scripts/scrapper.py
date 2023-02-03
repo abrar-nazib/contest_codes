@@ -6,6 +6,7 @@ import os
 import datetime
 import time
 import signal
+import re
 
 
 def determine_elem_names(platform, url=None):
@@ -55,24 +56,23 @@ def parse_problem(platform, url):
     elem_names = determine_elem_names(platform, url)
     title_elem = elem_names['title']
     problem_elem = elem_names['problem']
-    # url = 'https://www.hackerearth.com/problem/algorithm/mangoes/'
     res = session.get(url)
     html_object = res.html
     html_object.render(timeout=60)
 
     try:
         problem_title = html_object.find(title_elem)[0].text
-        print(f"Problem Title: {problem_title}")
+        print(f"[+] Problem Title Found. Title: {problem_title}")
     except Exception as e:
         problem_title = 'Not Found'
-        print("Title not found")
+        print("[-] Problem Title not found")
         print(e)
     problem_obj = html_object.find(problem_elem)
     try:
         problem_html = problem_obj[0].html
-        print("Problem statement found")
+        print("[+] Problem statement found")
     except Exception as e:
-        print("Problem Statement not found")
+        print("[-] Problem Statement not found")
         print(e)
         exit()
 
@@ -80,47 +80,52 @@ def parse_problem(platform, url):
     problem_text = f"# {problem_title} \n \n link: {url} \n \n {problem_text}"
     with open('README.md', 'w') as f:
         f.write(problem_text)
+        print("[+] README.md File Created.")
     return problem_title
 
 
-def create_basic_files(problem_title, url):
+def createCPPTemplate(problem_title, url):
     tday = datetime.date.today()
     tday = tday.strftime("%d-%m-%Y")
-    author = 'Nazib Abrar'
-    cppcontent = f"#define _LOCAL 1\n\n\
-// Problem: {problem_title}\n\
-// Link: {url}\n\
-// Date: {tday}\n\
-// Author: {author}\n\n\
-#include <bits/stdc++.h>\n\
-using namespace std;\n\n\
-int main()\n\
-{{\n\
-#ifdef _LOCAL\n\
-    freopen(\"input.txt\", \"r\", stdin);\n\
-    freopen(\"output.txt\", \"w\", stdout);\n\
-#endif\n\n\
-    ios::sync_with_stdio(0);\n\
-    cin.tie(0);\n\n\n\
-    return 0;\n\
-}}"
-    if (os.path.isdir('cpp')):
-        print("cpp folder already exists")
-    else:
-        os.mkdir('cpp')
-    with open('cpp/soln.cpp', 'w') as cppfile:
-        cppfile.write(cppcontent)
-    with open("cpp/input.txt", "w") as inp:
+    author = "Nazib Abrar"
+    detailPattern = re.compile(r'\$detail\$')
+    detailContent = ""
+    detailContent += f"Problem: {problem_title}\n"
+    detailContent += f"Link: {url}\n"
+    detailContent += f"Date: {tday}\n"
+    detailContent += f"Author: {author}\n"
+
+    with open('/home/abrar/contest_codes/scripts/cpp_template.cpp', 'r') as f:
+        cppContent = ""
+        for line in f.readlines():
+            if (detailPattern.findall(line) == []):
+                cppContent += line
+            else:
+                cppContent += detailContent
+
+    problem_title = problem_title.replace(" ", "_")
+    problem_title = problem_title.replace(".", "")
+    with open(f"soln_{problem_title}.cpp", 'w') as cppfile:
+        cppfile.write(cppContent)
+    print(f"[+] Created Template File soln_{problem_title}.cpp")
+
+
+def create_basic_files(problem_title, url):
+
+    createCPPTemplate(problem_title, url)
+
+    with open("input.txt", "w") as inp:
         pass
-    with open("cpp/output.txt", "w") as outp:
+    with open("output.txt", "w") as outp:
         pass
 
 
 def open_editor():
     time.sleep(1)
-    os.system("code cpp")
-    time.sleep(1)
-    os.system("code cpp/output.txt -n; code cpp/input.txt -n")
+    print("[*] Opening Code Editor....")
+    time.sleep(2)
+    os.system("code .")
+    os.system("code output.txt -n; code input.txt -n")
     os.kill(os.getppid(), signal.SIGHUP)    # destroy the terminal
 
 
