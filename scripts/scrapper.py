@@ -5,6 +5,7 @@ import markdownify
 import os
 import datetime
 import time
+import signal
 
 
 def determine_elem_names(platform, url=None):
@@ -18,13 +19,12 @@ def determine_elem_names(platform, url=None):
             'title': 'span.mr-2',
             'problem': 'div._1l1MA'
         }
-    elif (platform == 'hackerrank'):
-        rt = {
-            'title': 'h1',
-            'problem': 'div.hackdown-content'
-        }
-        create_basic_files(platform, url)
-        exit()
+    # elif (platform == 'hackerrank'):
+    #     rt = {
+    #         'title': 'h1',
+    #         'problem': 'div.hackdown-content'
+    #     }
+
     elif (platform == 'geeksforgeeks'):
         rt = {
             'title': 'h3.g-m-0',
@@ -36,8 +36,16 @@ def determine_elem_names(platform, url=None):
             'title': 'div.header div.title',
             'problem': 'div.problem-statement'
         }
+    elif (platform == 'codeforces'):
+        rt = {
+            'title': 'div.header div.title',
+            'problem': 'div.problem-statement'
+        }
     else:
-        print("Platform not recognized")
+        print("Platform not recognized. Not creating README")
+        create_basic_files(platform, url)
+        if (os.name == "posix"):    # only open editor if in popos
+            open_editor()
         exit()
     return rt
 
@@ -96,7 +104,10 @@ int main()\n\
     cin.tie(0);\n\n\n\
     return 0;\n\
 }}"
-    os.mkdir('cpp')
+    if (os.path.isdir('cpp')):
+        print("cpp folder already exists")
+    else:
+        os.mkdir('cpp')
     with open('cpp/soln.cpp', 'w') as cppfile:
         cppfile.write(cppcontent)
     with open("cpp/input.txt", "w") as inp:
@@ -108,8 +119,9 @@ int main()\n\
 def open_editor():
     time.sleep(1)
     os.system("code cpp")
-    time.sleep(3)
+    time.sleep(1)
     os.system("code cpp/output.txt -n; code cpp/input.txt -n")
+    os.kill(os.getppid(), signal.SIGHUP)    # destroy the terminal
 
 
 if __name__ == "__main__":
@@ -132,4 +144,5 @@ if __name__ == "__main__":
     platform = args.Platform
     title = parse_problem(platform=platform, url=url)
     create_basic_files(title, url)
-    open_editor()
+    if (os.name == "posix"):    # only open editor if in posix
+        open_editor()

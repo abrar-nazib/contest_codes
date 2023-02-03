@@ -8,6 +8,11 @@ typedef unsigned int ui;
 typedef unsigned long long llu;
 //------- /typedefs--------
 
+bool swap_logic(int a, int b) // for descending order sorting
+{
+    return a > b;
+}
+
 int main()
 {
 #ifdef _LOCAL
@@ -25,7 +30,7 @@ int main()
     {
         cin >> arr[i];
     }
-    sort(arr, &arr[n]);
+    sort(arr, &arr[n], swap_logic);
     for (int i = 0; i < n; i++)
     {
         cout << arr[i] << " ";
