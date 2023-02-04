@@ -37,11 +37,6 @@ def determine_elem_names(platform, url=None):
             'title': 'div.header div.title',
             'problem': 'div.problem-statement'
         }
-    elif (platform == 'codeforces'):
-        rt = {
-            'title': 'div.header div.title',
-            'problem': 'div.problem-statement'
-        }
     else:
         print("Platform not recognized. Not creating README")
         create_basic_files(platform, url)
@@ -56,13 +51,20 @@ def parse_problem(platform, url):
     elem_names = determine_elem_names(platform, url)
     title_elem = elem_names['title']
     problem_elem = elem_names['problem']
+
+    print("[*] Sending Request...")
+
     res = session.get(url)
+
     html_object = res.html
     html_object.render(timeout=60)
+
+    print("[+] Response Recieved.")
 
     try:
         problem_title = html_object.find(title_elem)[0].text
         print(f"[+] Problem Title Found. Title: {problem_title}")
+        time.sleep(0.2)
     except Exception as e:
         problem_title = 'Not Found'
         print("[-] Problem Title not found")
@@ -71,6 +73,7 @@ def parse_problem(platform, url):
     try:
         problem_html = problem_obj[0].html
         print("[+] Problem statement found")
+        time.sleep(0.2)
     except Exception as e:
         print("[-] Problem Statement not found")
         print(e)
@@ -81,7 +84,22 @@ def parse_problem(platform, url):
     with open('README.md', 'w') as f:
         f.write(problem_text)
         print("[+] README.md File Created.")
-    return problem_title
+
+    #
+    # Parsing Inputs and Outputs
+    #
+    input_elem = ""
+    output_elem = ""
+    try:
+        input_elem = html_object.find("div.input pre")[0].text
+    except:
+        print("[-] Could not extract test input")
+
+    try:
+        output_elem = html_object.find("div.output pre")[0].text
+    except:
+        print("[-] Could not extract test output")
+    return problem_title, input_elem, output_elem
 
 
 def createCPPTemplate(problem_title, url):
@@ -108,14 +126,15 @@ def createCPPTemplate(problem_title, url):
     with open(f"soln_{problem_title}.cpp", 'w') as cppfile:
         cppfile.write(cppContent)
     print(f"[+] Created Template File soln_{problem_title}.cpp")
+    time.sleep(0.2)
 
 
-def create_basic_files(problem_title, url):
+def create_basic_files(problem_title, url, input="", output=""):
 
     createCPPTemplate(problem_title, url)
 
     with open("input.txt", "w") as inp:
-        pass
+        inp.write(input)
     with open("output.txt", "w") as outp:
         pass
 
@@ -123,8 +142,9 @@ def create_basic_files(problem_title, url):
 def open_editor():
     time.sleep(1)
     print("[*] Opening Code Editor....")
-    time.sleep(2)
+    time.sleep(5)
     os.system("code .")
+    time.sleep(1)
     os.system("code output.txt -n; code input.txt -n")
     os.kill(os.getppid(), signal.SIGHUP)    # destroy the terminal
 
@@ -147,7 +167,7 @@ if __name__ == "__main__":
 
     url = args.Url
     platform = args.Platform
-    title = parse_problem(platform=platform, url=url)
-    create_basic_files(title, url)
+    title, input, output = parse_problem(platform=platform, url=url)
+    create_basic_files(title, url, input, output)
     if (os.name == "posix"):    # only open editor if in posix
         open_editor()
