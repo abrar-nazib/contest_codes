@@ -1,5 +1,8 @@
 /*
- $detail$
+Problem: D. Distinct Split
+Link: https://codeforces.com/contest/1791/problem/D
+Date: 05-02-2023
+Author: Nazib Abrar
 */
 
 #include <bits/stdc++.h>

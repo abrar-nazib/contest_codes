@@ -4,9 +4,8 @@ import argparse
 import markdownify
 import os
 import datetime
-import time
-import signal
 import re
+from codeEditorOpener import *
 
 
 def determine_elem_names(platform, url=None):
@@ -85,9 +84,9 @@ def parse_problem(platform, url):
         f.write(problem_text)
         print("[+] README.md File Created.")
 
-    #
+    # --------------------------------
     # Parsing Inputs and Outputs
-    #
+    # --------------------------------
     input_elem = ""
     output_elem = ""
     try:
@@ -137,16 +136,6 @@ def create_basic_files(problem_title, url, input="", output=""):
         inp.write(input)
     with open("output.txt", "w") as outp:
         pass
-
-
-def open_editor():
-    time.sleep(1)
-    print("[*] Opening Code Editor....")
-    time.sleep(5)
-    os.system("code .")
-    time.sleep(1)
-    os.system("code output.txt -n; code input.txt -n")
-    os.kill(os.getppid(), signal.SIGHUP)    # destroy the terminal
 
 
 if __name__ == "__main__":

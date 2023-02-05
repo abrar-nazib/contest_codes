@@ -40,37 +40,36 @@ int main()
 void solve()
 {
     // Solution code from here
-    set<char> s1, s2;
+    set<char> char_set;
+    unsigned int n;
     string str;
-    unsigned int n, max = 0, sum = 0;
+    unsigned int max = 0, sum = 0;
     cin >> n;
     cin >> str;
+    vector<unsigned int> prefix_arr(n - 1), suffix_arr(n - 1);
 
-    if (n == 2)
+    // for prefix
+    char_set.clear();
+    for (unsigned int i = 0; i < n - 1; i++)
     {
-        cout << 2 << "\n";
-        return;
+        char_set.insert(str[i]);
+        prefix_arr[i] = char_set.size();
     }
-    for (unsigned int i = 1; i < n - 1; i++)
+
+    // calculation for suffixes
+    char_set.clear();
+    for (unsigned int i = n - 1; i > 0; i--)
     {
-        s1.clear();
-        s2.clear();
-        for (unsigned int j = 0; j < n; j++)
-        {
-            if (j < i)
-            {
-                s1.insert(str[j]);
-            }
-            else
-            {
-                s2.insert(str[j]);
-            }
-        }
-        sum = s1.size() + s2.size();
+        char_set.insert(str[i]);
+        suffix_arr[i - 1] = char_set.size();
+    }
+
+    for (unsigned int i = 0; i < n - 1; i++)
+    {
+        sum = prefix_arr[i] + suffix_arr[i];
+        // cout << prefix_arr[i] << " + " << suffix_arr[i] << "\n";
         if (sum > max)
-        {
             max = sum;
-        }
     }
     cout << max << "\n";
 }

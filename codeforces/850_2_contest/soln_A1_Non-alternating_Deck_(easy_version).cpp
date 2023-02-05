@@ -1,5 +1,8 @@
 /*
- $detail$
+Problem: A1. Non-alternating Deck (easy version)
+Link: https://codeforces.com/contest/1786/problem/A1
+Date: 05-02-2023
+Author: Nazib Abrar
 */
 
 #include <bits/stdc++.h>
@@ -34,5 +37,5 @@ int main()
 
 void solve()
 {
-    // Solution code from here
+    // first find how many times the cards can be dealt
 }
