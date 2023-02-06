@@ -120,8 +120,9 @@ def createCPPTemplate(problem_title, url):
             else:
                 cppContent += detailContent
 
-    problem_title = problem_title.replace(" ", "_")
-    problem_title = problem_title.replace(".", "")
+    problem_title = re.sub("[- ]", "_", problem_title)
+    problem_title = re.sub("[().", "", problem_title)
+
     with open(f"soln_{problem_title}.cpp", 'w') as cppfile:
         cppfile.write(cppContent)
     print(f"[+] Created Template File soln_{problem_title}.cpp")
