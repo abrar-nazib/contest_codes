@@ -8,7 +8,30 @@ import re
 from codeEditorOpener import *
 
 
-def determine_elem_names(platform, url=None):
+def cleanTitle(problem_title: str):
+    """ Cleans the problem title statement by replacing specific characters
+
+    Args:
+        problem_title: String containing unsanitized problem title
+
+    Returns:
+        problem_title: String containing sanitized problem title
+    """
+    problem_title = re.sub("[- ]", "_", problem_title)
+    problem_title = re.sub("[().]", "", problem_title)
+    return problem_title
+
+
+def chooseHTMLelems(platform: str, url: str = None):
+    """Chooses html elements to scrap according to cp platform
+
+    Args:
+        platform: Name of online platform. Case sensitive. Available platforms: hackerearth, leetcode, geeksforgeeks, codeforces
+
+    Returns:
+        rt: A dictionary containing 'title' and 'problem'
+
+    """
     if (platform == 'hackerearth'):
         rt = {
             'title': 'div.title-panel div.title',
@@ -47,7 +70,7 @@ def determine_elem_names(platform, url=None):
 
 def parse_problem(platform, url):
     session = HTMLSession()
-    elem_names = determine_elem_names(platform, url)
+    elem_names = chooseHTMLelems(platform, url)
     title_elem = elem_names['title']
     problem_elem = elem_names['problem']
 
@@ -80,7 +103,8 @@ def parse_problem(platform, url):
 
     problem_text = markdownify.markdownify(problem_html, heading_style="ATX")
     problem_text = f"# {problem_title} \n \n link: {url} \n \n {problem_text}"
-    with open('README.md', 'w') as f:
+    readme_title = cleanTitle(problem_title)
+    with open(f"{readme_title}.md", 'w') as f:
         f.write(problem_text)
         print("[+] README.md File Created.")
 
@@ -102,6 +126,7 @@ def parse_problem(platform, url):
 
 
 def createCPPTemplate(problem_title, url):
+    """Creates cpp template files necessary for solving the problem"""
     tday = datetime.date.today()
     tday = tday.strftime("%d-%m-%Y")
     author = "Nazib Abrar"
@@ -120,23 +145,25 @@ def createCPPTemplate(problem_title, url):
             else:
                 cppContent += detailContent
 
-    problem_title = re.sub("[- ]", "_", problem_title)
-    problem_title = re.sub("[().", "", problem_title)
+    problem_title = cleanTitle(problem_title)
 
-    with open(f"soln_{problem_title}.cpp", 'w') as cppfile:
+    cppFileName = f"soln_{problem_title}.cpp"
+    with open(cppFileName, 'w') as cppfile:
         cppfile.write(cppContent)
-    print(f"[+] Created Template File soln_{problem_title}.cpp")
+    print(f"[+] Created Template File {cppFileName}")
     time.sleep(0.2)
+    return cppFileName
 
 
 def create_basic_files(problem_title, url, input="", output=""):
 
-    createCPPTemplate(problem_title, url)
+    templateFileName = createCPPTemplate(problem_title, url)
 
     with open("input.txt", "w") as inp:
         inp.write(input)
     with open("output.txt", "w") as outp:
         pass
+    return templateFileName
 
 
 if __name__ == "__main__":
@@ -158,6 +185,7 @@ if __name__ == "__main__":
     url = args.Url
     platform = args.Platform
     title, input, output = parse_problem(platform=platform, url=url)
-    create_basic_files(title, url, input, output)
+    filename = create_basic_files(title, url, input, output)
+    print(filename)
     if (os.name == "posix"):    # only open editor if in posix
-        open_editor()
+        open_editor(filename)
