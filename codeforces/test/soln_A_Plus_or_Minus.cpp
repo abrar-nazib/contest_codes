@@ -1,7 +1,7 @@
 /*
-Problem: A. Likes
-Link: https://codeforces.com/contest/1802/problem/A
-Date: 16-03-2023
+Problem: A. Plus or Minus
+Link: https://codeforces.com/contest/1807/problem/A
+Date: 21-03-2023
 Author: Nazib Abrar
 */
 
