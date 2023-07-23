@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "functional": "cpp"
-    }
+        "*.ejs": "html",
+        "functional": "cpp",
+        "vector": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
