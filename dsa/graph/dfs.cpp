@@ -1,8 +1,4 @@
-// #include <bits/stdc++.h>
-#include <iostream>
-#include <string>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
 
 //-------- typedefs -------
@@ -43,6 +39,8 @@ int main()
     {
         ui u, v;
         cin >> u >> v;
+
+        // Done twice because this is undirected graph
         adj[u].push_back(v);
         adj[v].push_back(u);
     }
