@@ -8,25 +8,35 @@ typedef unsigned long long llu;
 
 void solve()
 {
-  int n, x;
+  int n;
   cin >> n;
-  int a[n];
-  for (int i = 0; i < n; i++)
+  long p_pref_gcd[n + 2] = {0};
+  long p_suff_gcd[n + 2] = {0};
+  long prices[n + 2] = {0};
+  long discounted_prices[n + 2] = {0};
+  for (int i = 1; i <= n; i++)
   {
-    cin >> x;
-    a[i] = x;
+    cin >> prices[i];
+    p_pref_gcd[i] = gcd(p_pref_gcd[i - 1], prices[i]);
   }
-
-  sort(a, a + n);
-  for (int i = 1; i < n; i++)
+  for (int i = n; i >= 1; i--)
   {
-    if (abs(a[i - 1] - a[i]) > 1)
+    p_suff_gcd[i] = gcd(p_suff_gcd[i + 1], prices[i]);
+  }
+  long best = -INT_MAX;
+  for (int i = 1; i <= n; i++)
+  {
+    cin >> discounted_prices[i];
+    long calc_gcd = gcd(gcd(p_pref_gcd[i - 1], discounted_prices[i]), p_suff_gcd[i + 1]);
+    if (calc_gcd > best)
     {
-      cout << "NO\n";
-      return;
+      best = calc_gcd;
     }
   }
-  cout << "YES\n";
+  if (p_pref_gcd[n] < best)
+    cout << best << "\n";
+  else
+    cout << p_pref_gcd[n] << "\n";
 }
 
 int main()
