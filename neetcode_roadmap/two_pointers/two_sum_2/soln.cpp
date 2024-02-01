@@ -19,13 +19,14 @@ public:
         ios::sync_with_stdio(0);
         cin.tie(0);
 
-        int l_index = 0, r_index = numbers.size() - 1;
+        int l_index = 0, r_index = numbers.size() - 1, sum = 0;
         vector<int> sol_indices(2);
         while (l_index < r_index) // n-1 -> O(n)
         {
-            if (numbers[l_index] + numbers[r_index] > target)
+            sum = numbers[l_index] + numbers[r_index];
+            if (sum > target)
                 r_index--;
-            else if (numbers[l_index] + numbers[r_index] < target)
+            else if (sum < target)
                 l_index++;
             else
             {
