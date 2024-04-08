@@ -1,0 +1,11 @@
+5
+hanoi
+ionah
+ac
+wa
+hue
+hue
+abcdefghij
+gfedcjihab
+a
+b
