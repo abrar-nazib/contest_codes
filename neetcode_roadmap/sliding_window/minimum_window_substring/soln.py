@@ -1,39 +1,28 @@
 import numpy as np
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
-        s_dict = {}
-        t_dict = {}
-        matches = []
-        for i in range(len(t)):
-            t_dict[t[i]] =  t_dict.get(t[i], 0) + 1
-        l, r=0,0
-        for r in range(len(s)):
+        if not t or len(t) > len(s):
+            return ""
+        s_dict, t_dict = {}, {}
+        for i in t:
+            t_dict[i] = t_dict.get(i, 0) + 1
+        l, r, match_num = 0, 0, 0
+        min_len, min_l, min_r = float('inf'), 0, 0
+        while r < len(s):
             if s[r] in t_dict:
                 s_dict[s[r]] = s_dict.get(s[r], 0) + 1
-            if s_dict == t_dict:
-                matches.append(s[l:r+1])
-        for l in range(len(s)):
-            if s_dict == t_dict:
-                matches.append(s[l:r+1])
-            if s[l] in t_dict:
-                s_dict[s[l]] -= 1
-        if len(matches) == 0:
-            return ""
-        outputs = []
-        for output in matches:
-            l_trimmed_output = output
-            for i in range(len(output)):
-                if output[i] in t_dict:
-                    break
-                l_trimmed_output = output[i+1:]
-            r_trimmed_output = l_trimmed_output
-            for i in range(len(l_trimmed_output)-1, -1, -1):        
-                if l_trimmed_output[i] in t_dict:
-                    break
-                r_trimmed_output = l_trimmed_output[:i]
-            outputs.append(r_trimmed_output)
-        return min(outputs, key=len)
-
+                if s_dict[s[r]] == t_dict[s[r]]:
+                    match_num += 1
+            while match_num == len(t_dict):
+                if r - l + 1 < min_len:
+                    min_len, min_l, min_r = r - l + 1, l, r
+                if s[l] in t_dict:
+                    s_dict[s[l]] -= 1
+                    if s_dict[s[l]] < t_dict[s[l]]:
+                        match_num -= 1
+                l += 1
+            r += 1
+        return "" if min_len == float('inf') else s[min_l:min_r+1]
 def main(): 
     solution = Solution()
 
