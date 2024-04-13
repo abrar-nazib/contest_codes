@@ -19,7 +19,7 @@ class Solution
 public:
     vector<int> maxSlidingWindow(vector<int> &nums, int k)
     {
-        priority_queue<int, vector<int>, greater<int>> window;
+        multiset<int> window;
         vector<int> max_window;
         // Handle the initial set
         for (int i = 0; i < k; i++)
