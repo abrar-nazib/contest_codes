@@ -23,16 +23,16 @@ class MinStack:
 
 def main():
     obj = MinStack()
-    obj.push(-2)
+    obj.push(2)
     obj.push(0)
-    obj.push(-3)
+    obj.push(1)
     min1 = obj.getMin()  # Should print -3
     print("Min1: ", min1)
     obj.pop()
-    top = obj.top()  # Should print 0
-    print("Top: ", top)
     min2 = obj.getMin()  # Should print -2
     print("Min2: ", min2)
+    min3 = obj.getMin()
+    print("Min3: ", min3)
 
 if __name__ == "__main__":
     main()

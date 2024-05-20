@@ -15,7 +15,8 @@ int main()
 
     ios::sync_with_stdio(0);
     cin.tie(0);
-
+    unordered_map<int, bool> cardData;
+    cardData[serial] = true;
     int t;
     cin >> t;
     while (t--)
