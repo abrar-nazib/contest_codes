@@ -8,7 +8,18 @@ class ListNode:
 
 class Solution:
     def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
-        
+        dummy = current = ListNode(0)
+        while list1 and list2:
+            if list1.val < list2.val:
+                current.next = list1
+                list1 = list1.next
+            else:
+                current.next = list2
+                list2 = list2.next
+            current = current.next
+        current.next = list1 or list2
+        return dummy.next
+                
 
 def main():
     solution = Solution()
@@ -37,8 +48,8 @@ def main():
     print("Output 1: ", create_list(output))  # Should print [1, 1, 2, 3, 4, 4]
 
     # Example 2
-    list1 = create_linked_list([])
-    list2 = create_linked_list([])
+    list1 = create_linked_list([2])
+    list2 = create_linked_list([1])
     output = solution.mergeTwoLists(list1, list2)
     print("Output 2: ", create_list(output))  # Should print []
 
