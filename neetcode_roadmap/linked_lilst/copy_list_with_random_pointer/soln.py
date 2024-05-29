@@ -10,23 +10,21 @@ class Node:
 
 class Solution:
     def copyRandomList(self, head: Optional[Node]) -> Optional[Node]:
-        out_dict = {}
+        out_dict = {None: None} # This is the clever optimization!
         current = head
         if not current:
             return None
         while(current):
             out_node = Node(current.val)
-            out_dict[id(current)] = out_node
+            out_dict[current] = out_node
             current = current.next
         current = head
         while(current):
-            current_out_node = out_dict[id(current)]
-            if current.next:
-                current_out_node.next = out_dict[id(current.next)]
-            if current.random:
-                current_out_node.random = out_dict[id(current.random)]
+            current_out_node = out_dict[current]
+            current_out_node.next = out_dict[current.next]
+            current_out_node.random = out_dict[current.random]
             current = current.next
-        return out_dict[id(head)]
+        return out_dict[head]
             
         
 def main():
