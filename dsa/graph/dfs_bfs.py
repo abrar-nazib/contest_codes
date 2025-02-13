@@ -1,3 +1,6 @@
+import collections
+
+
 def dfs_stack(graph, node):
     # This dfs utilizes stack. Visualize:
     st = [node]
@@ -14,6 +17,16 @@ def dfs_recurse(graph, node):
         dfs_recurse(graph, n)
 
 
+def bfs(graph, node):
+    queue = collections.deque([node])
+    while queue:
+        n = queue.popleft()
+        print(n)
+        for neighbor in graph[n]:
+            queue.append(neighbor)
+
+
 graph = {"a": ["c", "b"], "b": ["d"], "c": ["e"], "d": ["f"], "e": [], "f": []}
-print(dfs_stack(graph, "a"))
-print(dfs_recurse(graph, "a"))
+dfs_stack(graph, "a")
+dfs_recurse(graph, "a")
+bfs(graph, "a")

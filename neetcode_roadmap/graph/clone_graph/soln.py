@@ -17,25 +17,31 @@ class Solution:
         # Build adjacency graph first, then build the actual graph
         adj_list = {}
         visited = set()
-        queue = collections.deque([node]) if node else None
-        while queue:
-            n = queue.popleft()
-            visited.add(n)
-            adj_list.setdefault(f"{n.val}", [])
-            for neighbor in n.neighbors:
 
-                if neighbor not in visited:
-                    queue.append(neighbor)
-                    adj_list[f"{n.val}"].append(neighbor.val)
-                    adj_list.setdefault(f"{neighbor.val}", []).append(n.val)
-        nodes = [Node(i + 1, []) for i in range(len(adj_list))]
-        if not nodes:
+        def build_adj_list(node_):
+            # Base case
+            if not node_ or node_.val in visited:
+                return
+            visited.add(node_.val)
+            adj_list.setdefault(str(node_.val), set())
+
+            for neighbor in node_.neighbors:
+                adj_list[str(node_.val)].add(str(neighbor.val))
+                adj_list.setdefault(str(neighbor.val), set()).add(str(node_.val))
+                build_adj_list(neighbor)
+
+        build_adj_list(node)
+        adj_list = dict(sorted(adj_list.items(), key=lambda item: int(item[0])))
+        print(adj_list)
+        nodes = [Node(int(k), []) for i, k in enumerate(adj_list)]
+        for i, k in enumerate(adj_list):
+            for elem in adj_list[k]:
+                nodes[int(k) - 1].neighbors.append(nodes[int(elem) - 1])
+
+        if len(nodes) > 0:
+            return nodes[0]
+        else:
             return None
-        for key, values in enumerate(adj_list):
-            n = nodes[int(key) - 1]
-            for val in values:
-                n.neighbors.append(nodes[int(val) - 1])
-        return nodes[0]
 
 
 def build_graph(adjList):
@@ -50,7 +56,7 @@ def build_graph(adjList):
     return nodes[0]
 
 
-def print_graph(node: Optional["Node"]):
+def prepare_adj_list(node: Optional["Node"]):
     if not node:
         return "[]"
 
@@ -61,18 +67,44 @@ def print_graph(node: Optional["Node"]):
         if node.val in visited:
             return
         visited.add(node.val)
-        adjList[node.val] = [n.val for n in node.neighbors]
+        adjList[node.val] = sorted([n.val for n in node.neighbors])
         for neighbor in node.neighbors:
             dfs(neighbor)
 
     dfs(node)
-    return adjList
+    return dict(sorted(adjList.items()))
 
 
 soln = Solution()
 adjList = [[2, 4], [1, 3], [2, 4], [1, 3]]
 node = build_graph(adjList)
 cloned_graph = soln.cloneGraph(node)
-print_graph(cloned_graph)
-print(soln.cloneGraph(Node(1)))
-print(soln.cloneGraph(None))
+# print(prepare_adj_list(cloned_graph))
+# print(soln.cloneGraph(Node(1)))
+# print(soln.cloneGraph(None))
+adjList = [[2, 3, 4], [1, 7], [1], [1, 5, 6, 8], [4], [4], [2], [4]]
+node = build_graph(adjList)
+cloned_graph = soln.cloneGraph(node)
+print(prepare_adj_list(cloned_graph))
+print()
+adjList = [
+    [2, 3, 4, 14],
+    [1, 7, 11],
+    [1],
+    [1, 5, 6, 8],
+    [4, 9],
+    [4],
+    [2, 10],
+    [4, 13],
+    [5, 12, 16],
+    [7],
+    [2],
+    [9, 15],
+    [8],
+    [1],
+    [12],
+    [9],
+]
+node = build_graph(adjList)
+cloned_graph = soln.cloneGraph(node)
+print(prepare_adj_list(cloned_graph))
